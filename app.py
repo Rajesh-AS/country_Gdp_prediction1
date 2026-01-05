@@ -8,11 +8,22 @@ st.set_page_config(page_title="Country GDP Predictor", page_icon="🌍")
 st.title("🌍 Country GDP Prediction App")
 st.write("Predict GDP per capita based on socio-economic indicators")
 
-# Load model
+# ---------------------------
+# Safe model loading
+# ---------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model = joblib.load(os.path.join(BASE_DIR, "models", "country_gdpp_model.pkl"))
+MODEL_PATH = os.path.join(BASE_DIR, "models", "country_gdpp_model.pkl")
 
-# Input fields
+try:
+    model = joblib.load(MODEL_PATH)
+    st.success("✅ Model loaded successfully")
+except Exception as e:
+    st.error(f"❌ Error loading model: {e}")
+    st.stop()
+
+# ---------------------------
+# Inputs
+# ---------------------------
 child_mort = st.number_input("Child Mortality", 0.0)
 exports = st.number_input("Exports (%)", 0.0)
 health = st.number_input("Health Spending (%)", 0.0)
